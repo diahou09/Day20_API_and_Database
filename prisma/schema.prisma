@@ -10,9 +10,44 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Notes {
+// model Notes {
+//   id Int @id @default(autoincrement())
+//   content String
+//   user String
+//   createAt DateTime @default(now())
+// }
+
+model Users {
   id Int @id @default(autoincrement())
-  content String
-  user String
-  createAt DateTime @default(now())
+  email String @unique
+  name String
+  password String
+  products Products[]
+  order Orders[]
+  point Points?
+}
+
+model Points{
+  id Int @id @default(autoincrement())
+  point Int
+  user_id Int @unique
+  user Users @relation(fields: [user_id], references: [id])
+}
+
+model Products {
+  id Int @id @default(autoincrement())
+  name String
+  desc String
+  price String
+  user_id Int 
+  user Users @relation(fields: [user_id], references: [id])
+  orders Orders[]
+}
+
+model Orders {
+  id Int @id @default(autoincrement())
+  user_id Int
+  user Users @relation(fields: [user_id], references: [id])
+  product_id Int
+  product Products @relation(fields: [product_id], references: [id])
 }
